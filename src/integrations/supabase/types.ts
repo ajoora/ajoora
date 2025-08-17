@@ -14,7 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      circle_members: {
+        Row: {
+          circle_id: string
+          id: string
+          joined_at: string
+          position: number | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          circle_id: string
+          id?: string
+          joined_at?: string
+          position?: number | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          circle_id?: string
+          id?: string
+          joined_at?: string
+          position?: number | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "circle_members_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      circles: {
+        Row: {
+          contribution_amount: number
+          created_at: string
+          created_by: string
+          description: string | null
+          frequency: string
+          id: string
+          max_members: number
+          name: string
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          contribution_amount: number
+          created_at?: string
+          created_by: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          max_members?: number
+          name: string
+          start_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          contribution_amount?: number
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          max_members?: number
+          name?: string
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contributions: {
+        Row: {
+          amount: number
+          circle_id: string
+          contribution_date: string
+          created_at: string
+          id: string
+          payment_method: string | null
+          reference: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          circle_id: string
+          contribution_date?: string
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          reference?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          circle_id?: string
+          contribution_date?: string
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          reference?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contributions_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payouts: {
+        Row: {
+          amount: number
+          circle_id: string
+          created_at: string
+          id: string
+          payment_reference: string | null
+          payout_date: string
+          period_end: string
+          period_start: string
+          recipient_id: string
+          status: string
+        }
+        Insert: {
+          amount: number
+          circle_id: string
+          created_at?: string
+          id?: string
+          payment_reference?: string | null
+          payout_date?: string
+          period_end: string
+          period_start: string
+          recipient_id: string
+          status?: string
+        }
+        Update: {
+          amount?: number
+          circle_id?: string
+          created_at?: string
+          id?: string
+          payment_reference?: string | null
+          payout_date?: string
+          period_end?: string
+          period_start?: string
+          recipient_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payouts_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
