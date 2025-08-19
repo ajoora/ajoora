@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Search, Users, CreditCard, User, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Search, Users, CreditCard, User, LogOut, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
@@ -26,22 +34,30 @@ const Header = () => {
             <CreditCard className="w-4 h-4 mr-2" />
             Transactions
           </Button>
-          <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/20">
-            <User className="w-4 h-4 mr-2" />
-            Accounts
-          </Button>
-          <div className="ml-4 text-sm opacity-75">
-            {user?.email}
-          </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={signOut}
-            className="text-primary-foreground hover:bg-primary-foreground/20"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/20">
+                <User className="w-4 h-4 mr-2" />
+                Account
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">My Account</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={signOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
       </div>
     </header>
