@@ -42,27 +42,53 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
 
   const fetchCircles = async () => {
     try {
-      // Fetch circles where user is a member or creator
-      const { data, error } = await supabase
+      // First get circles where user is creator or member
+      const { data: userCircles, error: circlesError } = await supabase
         .from("circles")
-        .select(`
-          *,
-          circle_members!inner(user_id, position),
-          member_count:circle_members(count)
-        `)
-        .or(`created_by.eq.${user?.id},circle_members.user_id.eq.${user?.id}`)
+        .select("*")
+        .or(`created_by.eq.${user?.id}`)
         .eq("status", "active");
 
-      if (error) throw error;
+      if (circlesError) throw circlesError;
 
-      // Process the data to add member info
-      const processedCircles = data?.map(circle => ({
-        ...circle,
-        member_count: circle.member_count?.[0]?.count || 0,
-        is_member: circle.circle_members.some((member: any) => member.user_id === user?.id)
-      })) || [];
+      // Get circles where user is a member
+      const { data: memberCircles, error: memberError } = await supabase
+        .from("circle_members")
+        .select(`
+          circle_id,
+          circles!inner(*)
+        `)
+        .eq("user_id", user?.id);
 
-      setCircles(processedCircles);
+      if (memberError) throw memberError;
+
+      // Combine and deduplicate circles
+      const allCircles = [...(userCircles || [])];
+      
+      memberCircles?.forEach(member => {
+        if (member.circles && !allCircles.find(c => c.id === member.circles.id)) {
+          allCircles.push(member.circles);
+        }
+      });
+
+      // Get member counts for each circle
+      const circlesWithCounts = await Promise.all(
+        allCircles.map(async (circle) => {
+          const { count } = await supabase
+            .from("circle_members")
+            .select("*", { count: "exact", head: true })
+            .eq("circle_id", circle.id);
+
+          return {
+            ...circle,
+            member_count: count || 0,
+            is_member: circle.created_by === user?.id || 
+                      memberCircles?.some(mc => mc.circle_id === circle.id)
+          };
+        })
+      );
+
+      setCircles(circlesWithCounts);
     } catch (error: any) {
       toast({
         title: "Error",

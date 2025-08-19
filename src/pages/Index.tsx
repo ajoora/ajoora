@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import CircleDetails from "@/components/CircleDetails";
 import CreateCircle from "@/components/CreateCircle";
 import InviteMembers from "@/components/InviteMembers";
 import CirclesList from "@/components/CirclesList";
+import ProfileEdit from "@/components/ProfileEdit";
 
-type ViewType = "list" | "details" | "create" | "invite";
+type ViewType = "list" | "details" | "create" | "invite" | "profile";
 
 interface Circle {
   id: string;
@@ -22,6 +23,15 @@ interface Circle {
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>("list");
   const [selectedCircle, setSelectedCircle] = useState<Circle | null>(null);
+
+  useEffect(() => {
+    const handleOpenProfile = () => {
+      setCurrentView("profile");
+    };
+
+    window.addEventListener('openProfile', handleOpenProfile);
+    return () => window.removeEventListener('openProfile', handleOpenProfile);
+  }, []);
 
   const handleCreateCircle = () => {
     setCurrentView("create");
@@ -41,6 +51,10 @@ const Index = () => {
     setCurrentView("invite");
   };
 
+  const handleCloseProfile = () => {
+    setCurrentView("list");
+  };
+
   const renderCurrentView = () => {
     switch (currentView) {
       case "create":
@@ -54,6 +68,8 @@ const Index = () => {
             circleName={selectedCircle.name}
           />
         ) : <CirclesList onCreateCircle={handleCreateCircle} onSelectCircle={handleSelectCircle} />;
+      case "profile":
+        return <ProfileEdit onClose={handleCloseProfile} />;
       default:
         return <CirclesList onCreateCircle={handleCreateCircle} onSelectCircle={handleSelectCircle} />;
     }
