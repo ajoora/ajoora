@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,7 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -165,7 +167,7 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
             <Card 
               key={circle.id} 
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => onSelectCircle(circle)}
+              onClick={() => navigate(`/circle/${circle.id}`)}
             >
               <CardHeader>
                 <div className="flex justify-between items-start">
