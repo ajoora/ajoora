@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import Header from "./Header";
+import InviteMembers from "./InviteMembers";
 
 interface Circle {
   id: string;
@@ -325,10 +326,11 @@ const CircleDetails = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Members ({members.length}/{circle.max_members})</h3>
             {isHost && (
-              <Button size="sm">
-                <Plus className="w-4 h-4 mr-2" />
-                Invite Members
-              </Button>
+              <InviteMembers 
+                circleId={circle.id} 
+                circleName={circle.name}
+                onInvitesSent={fetchMembers}
+              />
             )}
           </div>
           
