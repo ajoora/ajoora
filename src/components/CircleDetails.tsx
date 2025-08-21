@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import Header from "./Header";
 import InviteMembers from "./InviteMembers";
+import MemberReorder from "./MemberReorder";
 
 interface Circle {
   id: string;
@@ -326,11 +327,18 @@ const CircleDetails = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Members ({members.length}/{circle.max_members})</h3>
             {isHost && (
-              <InviteMembers 
-                circleId={circle.id} 
-                circleName={circle.name}
-                onInvitesSent={fetchMembers}
-              />
+              <div className="flex gap-2">
+                <MemberReorder 
+                  members={members}
+                  circleId={circle.id}
+                  onReorderComplete={fetchMembers}
+                />
+                <InviteMembers 
+                  circleId={circle.id} 
+                  circleName={circle.name}
+                  onInvitesSent={fetchMembers}
+                />
+              </div>
             )}
           </div>
           

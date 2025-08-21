@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Search, Users, CreditCard, User, LogOut, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import PendingInvites from "./PendingInvites";
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -34,6 +35,7 @@ const Header = () => {
             <CreditCard className="w-4 h-4 mr-2" />
             Transactions
           </Button>
+          <PendingInvites />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/20">
