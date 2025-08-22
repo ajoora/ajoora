@@ -47,27 +47,19 @@ const PendingInvites = () => {
       const { data, error } = await supabase
         .from("invitations")
         .select(`
-          id,
-          circle_id,
-          email,
-          status,
-          invited_at,
-          expires_at,
-          circles!inner(
-            name,
-            description,
-            contribution_amount,
-            frequency,
-            max_members
-          ),
-          profiles!invited_by(full_name)
+          *,
+          circles(name, description, contribution_amount, frequency, max_members),
+          profiles!invitations_invited_by_fkey(full_name)
         `)
         .eq("email", user?.email)
         .eq("status", "pending")
         .gt("expires_at", new Date().toISOString())
         .order("invited_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Query error:", error);
+        throw error;
+      }
       console.log("Fetched invitations:", data);
       setInvitations((data as any) || []);
     } catch (error: any) {
