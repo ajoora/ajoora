@@ -48,7 +48,7 @@ const PendingInvites = () => {
         .from("invitations")
         .select(`
           *,
-          circles(name, description, contribution_amount, frequency, max_members),
+          circles!invitations_circle_id_fkey(name, description, contribution_amount, frequency, max_members),
           profiles!invitations_invited_by_fkey(full_name)
         `)
         .eq("email", user?.email)
