@@ -271,6 +271,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_current_user_email: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       user_can_view_circle: {
         Args: { _circle_id: string; _user_id: string }
         Returns: boolean
