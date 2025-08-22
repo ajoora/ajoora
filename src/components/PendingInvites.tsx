@@ -57,6 +57,7 @@ const PendingInvites = () => {
         .order("invited_at", { ascending: false });
 
       if (error) throw error;
+      console.log("Fetched invitations:", data);
       setInvitations((data as any) || []);
     } catch (error: any) {
       console.error("Error fetching invitations:", error);
