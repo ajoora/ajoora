@@ -47,9 +47,20 @@ const PendingInvites = () => {
       const { data, error } = await supabase
         .from("invitations")
         .select(`
-          *,
-          circles(name, description, contribution_amount, frequency, max_members),
-          profiles!invitations_invited_by_fkey(full_name)
+          id,
+          circle_id,
+          email,
+          status,
+          invited_at,
+          expires_at,
+          circles!inner(
+            name,
+            description,
+            contribution_amount,
+            frequency,
+            max_members
+          ),
+          profiles!invited_by(full_name)
         `)
         .eq("email", user?.email)
         .eq("status", "pending")
