@@ -77,10 +77,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto p-4 space-y-6">
-        <Header />
+      <Header />
+      <main className="max-w-7xl mx-auto px-6 py-8">
         {renderCurrentView()}
-      </div>
+      </main>
     </div>
   );
 };

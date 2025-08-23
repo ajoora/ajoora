@@ -113,18 +113,32 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="space-y-8">
+        <div className="flex justify-between items-center">
+          <div className="space-y-2">
+            <div className="h-8 bg-muted rounded w-48 animate-pulse"></div>
+            <div className="h-4 bg-muted rounded w-64 animate-pulse"></div>
+          </div>
+          <div className="h-10 bg-muted rounded w-32 animate-pulse"></div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i} className="animate-pulse border-border">
               <CardHeader>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-                <div className="h-3 bg-muted rounded w-1/2"></div>
+                <div className="h-5 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2 mt-2"></div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <div className="h-3 bg-muted rounded"></div>
-                  <div className="h-3 bg-muted rounded w-2/3"></div>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-muted rounded w-20"></div>
+                    <div className="h-4 bg-muted rounded w-16"></div>
+                  </div>
+                  <div className="h-4 bg-muted rounded w-32"></div>
+                  <div className="flex justify-between items-center pt-2">
+                    <div className="h-5 bg-muted rounded w-12"></div>
+                    <div className="h-8 w-8 bg-muted rounded-full"></div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -135,28 +149,30 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">My Circles</h1>
-          <p className="text-muted-foreground">Manage your savings circles</p>
+          <h1 className="text-3xl font-bold text-foreground">My Circles</h1>
+          <p className="text-muted-foreground mt-1">Manage your savings circles and grow together</p>
         </div>
-        <Button onClick={onCreateCircle} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
+        <Button onClick={onCreateCircle} className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
+          <Plus className="w-4 h-4 mr-2" />
           Create Circle
         </Button>
       </div>
 
       {circles.length === 0 ? (
-        <Card className="text-center py-12">
-          <CardContent>
-            <Users className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No Circles Yet</h3>
-            <p className="text-muted-foreground mb-6">
-              Create your first savings circle to start building wealth with friends.
+        <Card className="text-center py-16 border-dashed border-2 border-border bg-muted/20">
+          <CardContent className="pt-6">
+            <div className="bg-accent rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+              <Users className="w-8 h-8 text-accent-foreground" />
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-foreground">No Circles Yet</h3>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              Create your first savings circle to start building wealth with friends and family.
             </p>
-            <Button onClick={onCreateCircle}>
-              <Plus className="w-4 h-4 mr-2" />
+            <Button onClick={onCreateCircle} size="lg" className="bg-primary hover:bg-primary/90">
+              <Plus className="w-5 h-5 mr-2" />
               Create Your First Circle
             </Button>
           </CardContent>
@@ -166,51 +182,58 @@ const CirclesList = ({ onCreateCircle, onSelectCircle }: CirclesListProps) => {
           {circles.map((circle) => (
             <Card 
               key={circle.id} 
-              className="cursor-pointer hover:shadow-lg transition-shadow"
+              className="cursor-pointer hover:shadow-lg hover:border-accent transition-all duration-200 bg-card border-border"
               onClick={() => navigate(`/circle/${circle.id}`)}
             >
-              <CardHeader>
+              <CardHeader className="pb-4">
                 <div className="flex justify-between items-start">
-                  <CardTitle className="text-lg">{circle.name}</CardTitle>
-                  <Badge className={getStatusColor(circle.status)}>
+                  <CardTitle className="text-lg text-card-foreground">{circle.name}</CardTitle>
+                  <Badge 
+                    variant={circle.status === 'active' ? 'default' : 'secondary'}
+                    className="capitalize"
+                  >
                     {circle.status}
                   </Badge>
                 </div>
                 {circle.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
                     {circle.description}
                   </p>
                 )}
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-1">
-                    <DollarSign className="w-4 h-4 text-muted-foreground" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <DollarSign className="w-4 h-4" />
                     <span>₦{circle.contribution_amount.toLocaleString()}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4 text-muted-foreground" />
-                    <span>{circle.member_count}/{circle.max_members}</span>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Users className="w-4 h-4" />
+                    <span className="text-sm">{circle.member_count}/{circle.max_members}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
                   <span>{circle.frequency} • Starts {format(new Date(circle.start_date), 'MMM dd')}</span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
+                <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <div className="flex items-center gap-2">
                     {circle.created_by === user?.id && (
-                      <Badge variant="outline" className="text-xs">Host</Badge>
+                      <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
+                        Host
+                      </Badge>
                     )}
                     {circle.is_member && circle.created_by !== user?.id && (
-                      <Badge variant="secondary" className="text-xs">Member</Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        Member
+                      </Badge>
                     )}
                   </div>
-                  <Avatar className="w-6 h-6">
-                    <AvatarFallback className="text-xs">
-                      {circle.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  <Avatar className="w-8 h-8 border-2 border-accent">
+                    <AvatarFallback className="text-xs bg-accent text-accent-foreground font-medium">
+                      {circle.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
